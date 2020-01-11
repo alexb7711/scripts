@@ -1,12 +1,12 @@
 #!/bin/sh
 
+# Auto Monitor Switcher
+# Author: Alexander Brown
+# v1.0
+
 # No external display present 
-xrandr --output eDP1 --auto --primary 
+xrandr | grep -w 'DP1 disconnected' && xrandr | grep -w 'HDMI1 disconnected' && xrandr | grep -w 'HDMI2 disconnected' && xrandr --output eDP1 --auto --primary && echo "eDP1"
 
 # Display port connected (Display only on external monitor)
-xrandr | grep 'DP1 connected 2560' && xrandr --output eDP1 --off --output DP1 --auto --primary
-
-# Display port connected on startup (Display only on external monitor)
-xrandr | grep 'DP1 connected 1920' && xrandr --output eDP1 --off --output DP1 --auto --primary && echo "external"
-
+xrandr | grep -w 'DP1 connected' && xrandr --output eDP1 --off --output DP1 --auto --primary && echo "DP1"
 
