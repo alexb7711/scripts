@@ -10,5 +10,5 @@ cd "$dir" || exit
 case "$file" in
     *\ms) groff -ms "$file" > "$base".ps;;
     *.md) pandoc "$file" -o "$base".pdf;; 
-
+    *.tex) pdflatex "$file"
 esac

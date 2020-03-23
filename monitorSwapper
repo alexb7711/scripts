@@ -2,11 +2,18 @@
 
 # Auto Monitor Switcher
 # Author: Alexander Brown
-# v1.0
+# v2.0
+# Change Log: 
+# v2.0: Using grep -w to simplify script
 
 # No external display present 
-xrandr | grep -w 'DP1 disconnected' && xrandr | grep -w 'HDMI1 disconnected' && xrandr | grep -w 'HDMI2 disconnected' && xrandr --output eDP1 --auto --primary && echo "eDP1"
+xrandr | grep -w 'DP-1 disconnected' && xrandr | grep -w 'HDMI-1 disconnected' && xrandr | grep -w 'HDMI-2 disconnected' && xrandr --output eDP-1 --auto --primary && echo "eDP1"
 
 # Display port connected (Display only on external monitor)
-xrandr | grep -w 'DP1 connected' && xrandr --output eDP1 --off --output DP1 --auto --primary && echo "DP1"
+xrandr | grep -w 'DP-1 connected' && xrandr --output eDP-1 --off --output DP-1 --auto --primary && echo "DP1"
 
+# HDMI1 connected (Display only on external monitor)
+xrandr | grep -w 'HDMI-1 connected' && xrandr --output eDP-1 --off --output HDMI-1 --auto --primary && echo "HDMI1"
+
+# HDMI2 connected (Display only on external monitor)
+xrandr | grep -w 'HDMI-2 connected' && xrandr --output eDP-1 --off --output HDMI-2 --auto --primary && echo "HDMI2"
