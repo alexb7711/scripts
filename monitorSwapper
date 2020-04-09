@@ -17,3 +17,5 @@ xrandr | grep -w 'HDMI-1 connected' && xrandr --output eDP-1 --off --output HDMI
 
 # HDMI2 connected (Display only on external monitor)
 xrandr | grep -w 'HDMI-2 connected' && xrandr --output eDP-1 --off --output HDMI-2 --auto --primary && echo "HDMI2"
+
+~/.fehbg &
