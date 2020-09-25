@@ -8,7 +8,8 @@ shebang=$(sed -n 1p "$file")
 cd "$dir" || exit
 
 case "$file" in
-    *\ms) groff -ms "$file" > "$base".ps;;
+    *.ms) groff -ms "$file" > "$base".ps;;
     *.md) pandoc --pdf-engine=xelatex "$file" -o "$base".pdf;; 
+    *.markdown) pandoc -t beamer --pdf-engine=xelatex "$file" -o "$base".pdf;; 
     *.tex) pdflatex "$file"
 esac
