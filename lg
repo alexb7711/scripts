@@ -145,7 +145,7 @@ case "$1" in
 		then 
 			git add .
 			git commit -m "$message"
-			git push "$branch"
+			git push origin "$branch"
 		else
 			echo "Please provide a commit message"
 		fi
