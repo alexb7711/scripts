@@ -1,0 +1,156 @@
+#!/bin/sh
+
+#################################################################################
+#	FUNCTIONS
+#################################################################################
+
+function printHelp()
+{
+	echo "Lazy Git (lg) is meant to make git quick and easy. Below are the accepted commands as well as a small description of what they do"
+
+	echo ""
+	echo "COMMANDS"
+	echo ""
+
+	echo "Delete: Delete a branch both locally and remotely"
+	echo "--delete | -d   | delete)"
+	echo ""
+	
+	echo "Diff: Check the differences between current branch and origin/current branch"
+	echo "--diff | -df  | diff)"
+	echo ""
+
+	echo "Fetch: fetch the latest commits"
+	echo "--fetch  | -f   | fetch)"
+	echo ""
+
+	echo "Help: Print out this help menu"
+	echo "--help   | -h   | help)"
+	echo ""
+
+	echo "Log: Print a log of all the commits in a nice format"
+	echo "--log    | -l   | log)"
+	echo ""
+	
+	echo "Log Between: Print a log of all the commits between branch and origin/branch"
+	echo "--log-between    | -lb   | log-between)"
+	echo ""
+
+	echo "Switch: Unstage all current commits and switch branches"
+	echo "--switch | -s   | switch)"
+	echo ""
+
+	echo "Squash: Squash and merge all commits or squash specified commits in a branch"
+	echo "--squash | -q   | squash)"
+	echo ""
+
+	echo "Commits, adds message, and pushes to current branch"
+	echo "--push   | -p   | push)"
+}
+
+#################################################################################
+#				SCRIPT						#
+case "$1" in
+	--branch | -b | branch)
+		$branch=$2
+
+		if [ ! -z $branch ] 
+		then
+			echo "TODO"	
+		else	
+			echo "Please specify a branch name"
+		fi
+		;;
+
+	--delete | -d | delete)
+		branch=$2
+
+		if [ ! -z $branch ]
+		then
+			git branch -D $branch
+			git push -d origin $branch
+		else
+			echo "Please specify a branch name"
+		fi
+		;;
+
+	--delete | -d | delete)
+		branch=$2
+
+		if [ ! -z $branch ]
+		then
+			git diff $branch origin/$branch
+		else
+			echo "Please specify a branch name"
+		fi
+		;;
+
+	--fetch  | -f   | fetch)
+		git fetch
+		;;
+
+	--help | -h | help)
+		;;
+	
+	--log | -l | log)
+		git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''%C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+		;;
+	
+	--log-between    | -lb   | log-between)
+		git fetch
+		remote_branch=$(git symbolic-ref --short -q HEAD)
+
+		if [ ! -z "$2" ]
+		then
+			remote_branch=$2
+		fi
+
+		echo "Showing logs between $remote_branch and origin/$remote_branch"
+		git log $remote_branch..origin/$remote_branch --oneline
+		;;
+
+	--switch | -s | switch)
+		branch=$2
+
+		if [ ! -z $branch ]
+		then 
+			git stash
+			git checkout -b $branch
+			git stash pop
+		else
+			echo "Please specify a branch name"
+		fi
+		;;
+
+	--squash | -q | squash)
+		branch=$2
+		commits=$3
+
+		if [ ! -z $commits ]
+		then
+			git rebase -i $commits
+		elif [ ! -z $branch ]
+		then
+			git merge --squash $branch
+		else
+			echo "Please input a branch or commits to squash"
+		fi
+		;;
+
+	--push | -p | push)
+		message="$2"
+		branch= $(git symbolic-ref --short -q HEAD)
+		
+		if [ ! -z "$message" ]
+		then 
+			git add .
+			git commit -m "$message"
+			git push origin "$branch"
+		else
+			echo "Please provide a commit message"
+		fi
+		;;
+esac
+
+#				SCRIPT						#
+#################################################################################
