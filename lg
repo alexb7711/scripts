@@ -139,7 +139,7 @@ case "$1" in
 
 	--push | -p | push)
 		message="$2"
-		branch= $(git symbolic-ref --short -q HEAD)
+		branch= "$(git symbolic-ref --short -q HEAD)"
 		
 		if [ ! -z "$message" ]
 		then 
