@@ -36,6 +36,10 @@ function printHelp()
 	echo "--log-between    | -lb   | log-between)"
 	echo ""
 
+	echo "Rename Local: Rename the local branch"
+	echo "-rename-local | -rl | rename-local)"
+	echo ""
+
 	echo "Switch: Unstage all current commits and switch branches"
 	echo "--switch | -s   | switch)"
 	echo ""
@@ -44,7 +48,7 @@ function printHelp()
 	echo "--squash | -q   | squash)"
 	echo ""
 
-	echo "Commits, adds message, and pushes to current branch"
+	echo "Push: Commits, adds message, and pushes to current branch"
 	echo "--push   | -p   | push)"
 }
 
@@ -90,6 +94,7 @@ case "$1" in
 		;;
 
 	--help | -h | help)
+		printHelp
 		;;
 	
 	--log | -l | log)
@@ -108,6 +113,31 @@ case "$1" in
 		echo "Showing logs between $remote_branch and origin/$remote_branch"
 		git log $remote_branch..origin/$remote_branch --oneline
 		;;
+	
+	-rename-local | -rl | rename-local)
+		new_branch_name=$2
+		old_branch_name="$(git symbolic-ref --short -q HEAD)"
+
+		if [ ! -z "$new_branch_name" ]
+		then
+			git branch -m "$old_branch_name" "$new_branch_name"
+		else
+			echo "Please specify a new branch name"
+		fi
+		;;
+
+	-rename-remote | -rr | rename-remote)
+		new_branch_name=$2
+		old_branch_name="$(git symbolic-ref --short -q HEAD)"
+
+		if [ ! -z "$new_branch_name" ]
+		then
+			git push origin :"$old_branch_name"
+			git push origin -u "$new_branch_name"
+		else
+			echo "Please specify a new branch name"
+		fi
+		;;
 
 	--switch | -s | switch)
 		branch=$2
@@ -123,15 +153,14 @@ case "$1" in
 		;;
 
 	--squash | -q | squash)
-		branch=$2
-		commits=$3
+		branch="$2"
+		comment="$3"
 
-		if [ ! -z $commits ]
-		then
-			git rebase -i $commits
-		elif [ ! -z $branch ]
+		if [ ! -z "$branch" ] && [ ! -z "$comment" ]
 		then
 			git merge --squash $branch
+			git commit -m "$comment"
+			git push
 		else
 			echo "Please input a branch or commits to squash"
 		fi
