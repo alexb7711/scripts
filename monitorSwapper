@@ -7,22 +7,26 @@
 # v2.0: Using grep -w to simplify script
 # v2.1: Monitors that are not connected are turned off
 
-# No external display present 
-xrandr | grep -w 'DP-1 disconnected' && xrandr | grep -w 'HDMI-1 disconnected' && xrandr | grep -w 'HDMI-2 disconnected' && xrandr --output eDP-1 --auto --primary --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off && echo "eDP1" 
+case "$HOST" in
+	"Newty")
+	# No external display present 
+	xrandr | grep -w 'DP-1 disconnected' && xrandr | grep -w 'HDMI-1 disconnected' && xrandr | grep -w 'HDMI-2 disconnected' && xrandr --output eDP-1 --auto --primary --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off && echo "eDP1" 
 
-# Display port connected and HDMI-2 (Display only on external monitor)
-# xrandr | grep -w 'DP-1 connected' && xrandr | grep -w 'HDMI-2 connected' && xrandr --output eDP-1 --off --output DP-1 --auto --primary --output HDMI-2 --auto --rotate right --left-of DP-1 && echo "DP1" 
-xrandr | grep -w 'DP-1 connected' && xrandr | grep -w 'HDMI-2 connected' && xrandr --output eDP-1 --off --output DP-1 --auto --primary --output HDMI-2 --auto --rotate left --right-of DP-1 && echo "DP1" 
+	# Display port connected and HDMI-2 (Display only on external monitor)
+	# xrandr | grep -w 'DP-1 connected' && xrandr | grep -w 'HDMI-2 connected' && xrandr --output eDP-1 --off --output DP-1 --auto --primary --output HDMI-2 --auto --rotate right --left-of DP-1 && echo "DP1" 
+	xrandr | grep -w 'DP-1 connected' && xrandr | grep -w 'HDMI-2 connected' && xrandr --output eDP-1 --off --output DP-1 --auto --primary --output HDMI-2 --auto --rotate left --right-of DP-1 && echo "DP1" 
 
-# Display port connected (Display only on external monitor)
-# xrandr | grep -w 'DP-1 connected' && xrandr | grep -w 'HDMI-1 disconnected' && xrandr | grep -w 'HDMI-2 disconnected' && xrandr --output eDP-1 --off --output DP-1 --auto --primary --output HDMI-1 --off --output HDMI-2 --off && echo "DP1"
-xrandr | grep -w 'DP-1 connected' && xrandr | grep -w 'HDMI-1 disconnected' && xrandr | grep -w 'HDMI-2 disconnected' && xrandr --output DP-1 --auto --primary --output eDP-1 --auto --right-of DP-1 --output HDMI-1 --off --output HDMI-2 --off && echo "DP1"
+	# Display port connected (Display only on external monitor)
+	# xrandr | grep -w 'DP-1 connected' && xrandr | grep -w 'HDMI-1 disconnected' && xrandr | grep -w 'HDMI-2 disconnected' && xrandr --output eDP-1 --off --output DP-1 --auto --primary --output HDMI-1 --off --output HDMI-2 --off && echo "DP1"
+	xrandr | grep -w 'DP-1 connected' && xrandr | grep -w 'HDMI-1 disconnected' && xrandr | grep -w 'HDMI-2 disconnected' && xrandr --output DP-1 --auto --primary --output eDP-1 --auto --right-of DP-1 --output HDMI-1 --off --output HDMI-2 --off && echo "DP1"
 
-# HDMI1 connected (Display only on external monitor)
-xrandr | grep -w 'HDMI-1 connected' && xrandr --output eDP-1 --off --output HDMI-1 --auto --primary --output DP-1 --off && echo "HDMI1"
+	# HDMI1 connected (Display only on external monitor)
+	xrandr | grep -w 'HDMI-1 connected' && xrandr --output eDP-1 --off --output HDMI-1 --auto --primary --output DP-1 --off && echo "HDMI1"
 
-# HDMI2 connected (Display only on external monitor)
-xrandr | grep -w 'HDMI-2 connected' && xrandr | grep -w 'HDMI-1 disconnected' && xrandr | grep -w 'DP-1 disconnected' && xrandr --output eDP-1 --off --output HDMI-2 --auto --primary --output HDMI-1 --off --output DP-1 --off && echo "HDMI2"
+	# HDMI2 connected (Display only on external monitor)
+	xrandr | grep -w 'HDMI-2 connected' && xrandr | grep -w 'HDMI-1 disconnected' && xrandr | grep -w 'DP-1 disconnected' && xrandr --output eDP-1 --off --output HDMI-2 --auto --primary --output HDMI-1 --off --output DP-1 --off && echo "HDMI2"
+	;;
+esac
 
 # Reload wallpaper
 setWallpaper
