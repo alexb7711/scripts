@@ -4,7 +4,7 @@
 #	FUNCTIONS
 #################################################################################
 
-function printHelp()
+printHelp ()
 {
 	echo "Lazy Git (lg) is meant to make git quick and easy. Below are the accepted commands as well as a small description of what they do"
 
