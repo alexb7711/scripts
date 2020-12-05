@@ -60,7 +60,7 @@ case "$1" in
 
 		if [ ! -z $branch ] 
 		then
-			echo "TODO"	
+			git checkout -b "$branch"
 		else	
 			echo "Please specify a branch name"
 		fi
