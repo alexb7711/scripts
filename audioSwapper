@@ -2,9 +2,9 @@
 
 # Auto Audio Switcher
 # Author: Alexander Brown
-# v1.0
+# v2.0
 
-source=`pactl list short sinks | grep -w RUNNING | head -c 2`
+source=`pactl list short sinks | grep -w RUNNING | awk '{print $1}'`
 
 pactl set-default-sink $source
 
