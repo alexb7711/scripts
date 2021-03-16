@@ -47,6 +47,10 @@ printHelp ()
 	echo "Squash: Squash and merge all commits or squash specified commits in a branch"
 	echo "--squash | -q   | squash)"
 	echo ""
+	
+	echo "Squash No Push: Squash and merge all commits or squash specified commits in a branch without pushing"
+	echo "--squash-no-push | -qn   | squash-no-push)"
+	echo ""
 
 	echo "Push: Commits, adds message, and pushes to current branch"
 	echo "--push   | -p   | push)"
@@ -165,7 +169,20 @@ case "$1" in
 			echo "Please input a branch or commits to squash"
 		fi
 		;;
+	
+	--squash-no-push | -qn | squash-no-push)
+		branch="$2"
+		comment="$3"
 
+		if [ ! -z "$branch" ] && [ ! -z "$comment" ]
+		then
+			git merge --squash $branch
+			git commit -m "$comment"
+		else
+			echo "Please input a branch or commits to squash"
+		fi
+		;;
+	
 	--push | -p | push)
 		message="$2"
 		branch="$(git symbolic-ref --short -q HEAD)"
