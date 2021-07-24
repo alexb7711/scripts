@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # Default Wallpaper Locations
-wallpaper="/usr/share/wallpapers/"
 background="/usr/share/backgrounds"
+wallpaper="/usr/share/wallpapers"
 
 # If wallpaper locations exists, set wallpaper
 if [ -d $wallpaper ] || [ -d $background ]
-then 
-	image=$(find /usr/share/wallpapers /usr/share/backgrounds -type f \( -name "*.png" -o -name "*.jpg" \) | shuf -n 1)
+then
+	image=$(find ${background} ${wallpaper} -type f \( -name "*.png" -o -name "*.jpg" \) | shuf -n 1)
 	xwallpaper --zoom "${image}"
 fi
