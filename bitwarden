@@ -9,5 +9,12 @@ session_path=/tmp/session
 # Load the session file
 session=`cat $session_path`
 
-bw list items --session "${session}" --pretty | grep -w "name" |
+# Parse out the item names
+list=$(bw list items --session "${session}" --pretty | grep -w name | cut -c14- | sed 's/"//' | sed 's/,//' )
 
+# Get selection
+selection=$(echo "$list" | dmenu)
+
+# Return the username and password
+bw --session $session get username $selection
+bw --session $session get password $selection
