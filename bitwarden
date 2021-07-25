@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Set path to where session file exists
+session_path=/tmp/session
+
+# If the session file does not exist, create it
+[ ! -f "$session_path" ] && bw unlock | grep "export BW_SESSION" | cut -d'"' -f 2 > ${session_path}
+
+# Load the session file
+session=`cat $session_path`
+
+bw list items --session "${session}" --pretty | grep -w "name" |
+
