@@ -2,19 +2,49 @@
 
 # Set path to where session file exists
 session_path=/tmp/session
+bw_exists=`command -v bw`
+run=0
 
-# If the session file does not exist, create it
-[ ! -f "$session_path" ] && bw unlock | grep "export BW_SESSION" | cut -d'"' -f 2 > ${session_path}
+for arg in "$@"
+do
+	case $arg in
+		"-h")
+			echo "This is the help menu"
+			;;
+		"-r")
+			rm $session_path
+			run=1
+			;;
+		*)
+			echo "Invalid argument"
+			;;
+	esac
+done
 
-# Load the session file
-session=`cat $session_path`
+if [ $run -eq 1 ] && [ -n "$bw_exists" ]
+then
+	# Check if seesion exists
+	if [ ! -f $session_path ]
+	then
+		## If the session file does not exist, create it
+		[ ! -f "$session_path" ] && bw unlock | grep "export BW_SESSION" | cut -d'"' -f 2 > ${session_path}
+	elif [ ! -s $session_path ]
+	then
+		## If the session file exists, but is empty
+		rm ${session_path}
+		[ ! -f "$session_path" ] && bw unlock | grep "export BW_SESSION" | cut -d'"' -f 2 > ${session_path}
+	fi
 
-# Parse out the item names
-list=$(bw list items --session "${session}" --pretty | grep -w name | cut -c14- | sed 's/"//' | sed 's/,//' )
+	# Load the session file
+	session=`cat $session_path`
 
-# Get selection
-selection=$(echo "$list" | dmenu)
+	# Parse out the item names
+	list=$(bw list items --session "${session}" --pretty | grep -w name | cut -c14- | sed 's/"//' | sed 's/,//' )
 
-# Return the username and password
-bw --session $session get username $selection
-bw --session $session get password $selection
+	# Get selection
+	selection=$(echo "$list" | dmenu)
+
+	# Return the username and password
+	bw --session $session get username $selection
+	bw --session $session get password $selection
+fi
