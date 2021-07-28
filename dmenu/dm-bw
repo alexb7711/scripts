@@ -64,13 +64,13 @@ do
 			bw lock
 			;;
 		"-p")
-			bw --session $session get password $selection
+			bw --session $session get password $selection | xclip -selection clipboard
 			;;
 		"-r")
 			rm $session_path
 			;;
 		"-u")
-			bw --session $session get username $selection
+			bw --session $session get username $selection | xclip -selection clipboard
 			;;
 		"-s")
 			echo "Input server name: "
