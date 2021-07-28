@@ -35,6 +35,7 @@ get_config() {
   # add User config path
   _config_files+=( "${HOME}/.config/dmscripts/config" )
 
+
   # Add git-repo relative config path (if exits)
   [[ -f "${_local_conf}/config" ]] && _config_files+=( "${_local_conf}/config" )
 

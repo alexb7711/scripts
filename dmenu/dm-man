@@ -44,7 +44,7 @@ function main() {
     'Random manpage')
           # shellcheck disable=SC2086
           man -k . | awk '{print $1}' | shuf -n 1 | \
-          ${DMENU} -i -l 20 -p 'Random manpage:' | xargs $DMTERM man
+          ${DMENU} -l 20 -p 'Random manpage:' | xargs $DMTERM man
     ;;
     'Quit')
       echo "Program terminated." && exit 0

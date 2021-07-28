@@ -3,20 +3,21 @@
 # Set path to where session file exists
 session_path=/tmp/session
 bw_exists=`command -v bw`
-run=0
+run=1
 
 for arg in "$@"
 do
 	case $arg in
 		"-h")
 			echo "This is the help menu"
+			run=0
 			;;
 		"-r")
 			rm $session_path
-			run=1
 			;;
 		*)
 			echo "Invalid argument"
+			run=0
 			;;
 	esac
 done
@@ -42,7 +43,7 @@ then
 	list=$(bw list items --session "${session}" --pretty | grep -w name | cut -c14- | sed 's/"//' | sed 's/,//' )
 
 	# Get selection
-	selection=$(echo "$list" | dmenu)
+	selection=$(echo "$list" | dmenu -p "Select Login: ")
 
 	# Return the username and password
 	bw --session $session get username $selection

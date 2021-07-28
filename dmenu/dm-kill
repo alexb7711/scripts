@@ -28,7 +28,7 @@ source "$(get_config)"
 main() {
     # Running ps to get running processes and display in dmenu.
     selected="$(ps --user "$(id -u)" -F | \
-                ${DMENU} -i -l 20 -p "Search for process to kill:" "$@" | \
+                ${DMENU} -l 20 -p "Search for process to kill:" "$@" | \
                 awk '{print $2" "$11}')";
 
     # Nested 'if' statements.  The outer 'if' statement is what to do
@@ -36,7 +36,7 @@ main() {
     if [[ -n $selected ]]; then
         # Piping No/Yes into dmenu as a safety measure, in case you
         # select a process that you don't actually want killed.
-        answer="$(echo -e "No\nYes" | ${DMENU} -i -p "Kill $selected?" "$@")"
+        answer="$(echo -e "No\nYes" | ${DMENU} -p "Kill $selected?" "$@")"
 
         if [[ $answer == "Yes" ]]; then
             selpid="$(awk '{print $1}' <<< "$selected")";
