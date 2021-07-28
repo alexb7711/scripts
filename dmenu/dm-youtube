@@ -39,7 +39,7 @@ main() {
   # parse rss
   _video_list=$(parse_rss "$(curl -s "${_feed_url}")" )
 
-  _video=$(printf '%s\n' "${_video_list}" | sort -r | ${DMENU} -i -l 20 -p 'Select Video' "$@")
+  _video=$(printf '%s\n' "${_video_list}" | sort -r | ${DMENU} -l 20 -p 'Select Video' "$@")
   _video_id=$(echo "${_video}" | awk -F'|' '{print $2}' | sed -e 's/^[ \t]*//')
 
   if [[ -n ${_video_id} ]]; then
