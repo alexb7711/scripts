@@ -76,14 +76,14 @@ main() {
             ;;
         'Reboot')
             if [[ "$(echo -e "No\nYes" | ${DMENU} -p "${choice}?" "${@}" )" == "Yes" ]]; then
-               shutdown -r now
+               sudo shutdown -r now
             else
                 output "User chose not to reboot." && exit 0
             fi
             ;;
         'Shutdown')
             if [[ "$(echo -e "No\nYes" | ${DMENU} -p "${choice}?" "${@}" )" == "Yes" ]]; then
-               shutdown now
+               sudo shutdown now
             else
                 output "User chose not to shutdown." && exit 0
             fi
