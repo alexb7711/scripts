@@ -1,51 +1,85 @@
 #!/bin/sh
 
-# Set path to where session file exists
-session_path=/tmp/session
+##===============================================================================
+# GLOBAL VARS
+##===============================================================================
+session_path=/tmp/bw_session
 bw_exists=`command -v bw`
-run=1
 
+##===============================================================================
+# FUNCTIONS
+##===============================================================================
+create_session() {
+	[ ! -f "$session_path" ] && bw unlock | grep "export BW_SESSION" | cut -d'"' -f 2 > ${session_path}
+}
+
+get_selection() {
+	if [ -n "$bw_exists" ]
+	then
+		# Check if session exists
+		if [ ! -f $session_path ]
+		then
+			## If the session file does not exist, create it
+			create_session
+		elif [ ! -s $session_path ]
+		then
+			## If the session file exists, but is empty
+			rm ${session_path}
+			create_session
+		fi
+
+		# Load the session file
+		session=`cat $session_path`
+
+		# Parse out the item names
+		name_list=$(bw list items --session "${session}" --pretty | grep -w name | cut -c14- | sed 's/"//' | sed 's/,//' )
+
+		# Get selection
+		selection=$(echo "$name_list" | dmenu -lp "Select Login: ")
+
+		# Return the selection
+		return $selection
+	fi
+}
+
+##===============================================================================
+# SCRIPT
+##===============================================================================
 for arg in "$@"
 do
 	case $arg in
 		"-h")
 			echo "This is the help menu"
-			run=0
+			;;
+		"-i")
+			echo "Email: "
+			read email
+			echo "Password: "
+			read password
+			bw login $email $password
+			;;
+		"-l")
+			echo "Locking Bitwarden..."
+			rm $session_path
+			bw lock
+			;;
+		"-p")
+			bw --session $session get password $selection
 			;;
 		"-r")
 			rm $session_path
 			;;
+		"-u")
+			bw --session $session get username $selection
+			;;
+		"-s")
+			echo "Input server name: "
+			read server
+			bw config server $server
+			;;
 		*)
 			echo "Invalid argument"
-			run=0
 			;;
 	esac
 done
 
-if [ $run -eq 1 ] && [ -n "$bw_exists" ]
-then
-	# Check if seesion exists
-	if [ ! -f $session_path ]
-	then
-		## If the session file does not exist, create it
-		[ ! -f "$session_path" ] && bw unlock | grep "export BW_SESSION" | cut -d'"' -f 2 > ${session_path}
-	elif [ ! -s $session_path ]
-	then
-		## If the session file exists, but is empty
-		rm ${session_path}
-		[ ! -f "$session_path" ] && bw unlock | grep "export BW_SESSION" | cut -d'"' -f 2 > ${session_path}
-	fi
-
-	# Load the session file
-	session=`cat $session_path`
-
-	# Parse out the item names
-	list=$(bw list items --session "${session}" --pretty | grep -w name | cut -c14- | sed 's/"//' | sed 's/,//' )
-
-	# Get selection
-	selection=$(echo "$list" | dmenu -p "Select Login: ")
-
-	# Return the username and password
-	bw --session $session get username $selection
-	bw --session $session get password $selection
-fi
