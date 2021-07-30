@@ -1,45 +1,64 @@
-#!/bin/sh
+#!/bin/bash
 
 ##===============================================================================
 # GLOBAL VARS
 ##===============================================================================
-session_path=/tmp/bw_session
+SESSION_PATH=$HOME/.cache/bw_cache
 bw_exists=`command -v bw`
 
 ##===============================================================================
 # FUNCTIONS
 ##===============================================================================
 create_session() {
-	[ ! -f "$session_path" ] && bw unlock | grep "export BW_SESSION" | cut -d'"' -f 2 > ${session_path}
+	[ ! -f "$SESSION_PATH" ] && bw unlock | grep "export BW_SESSION" | cut -d'"' -f 2 > ${SESSION_PATH}
 }
 
 get_selection() {
+	declare -n SESSION=$1
+	declare -n SELECTION=$2
+
 	if [ -n "$bw_exists" ]
 	then
-		# Check if session exists
-		if [ ! -f $session_path ]
+		# Check if SESSION exists
+		if [ ! -f $SESSION_PATH ]
 		then
-			## If the session file does not exist, create it
+			## If the SESSION file does not exist, create it
 			create_session
-		elif [ ! -s $session_path ]
+		elif [ ! -s $SESSION_PATH ]
 		then
-			## If the session file exists, but is empty
-			rm ${session_path}
+			## If the SESSION file exists, but is empty
+			rm ${SESSION_PATH}
 			create_session
 		fi
 
-		# Load the session file
-		session=`cat $session_path`
+		# Load the SESSION file
+		SESSION=`cat $SESSION_PATH`
 
 		# Parse out the item names
-		name_list=$(bw list items --session "${session}" --pretty | grep -w name | cut -c14- | sed 's/"//' | sed 's/,//' )
+		name_list=$(bw list items --session "${SESSION}" --pretty | grep -w name | cut -c14- | sed 's/"//' | sed 's/,//' )
 
-		# Get selection
-		selection=$(echo "$name_list" | dmenu -lp "Select Login: ")
-
-		# Return the selection
-		return $selection
+		# Get SELECTION
+		SELECTION=$(echo "$name_list" | dmenu -p "Select Login: ")
 	fi
+}
+
+get_session() {
+	declare -n SESSION=$1
+
+	# Check if SESSION exists
+	if [ ! -f $SESSION_PATH ]
+	then
+		## If the SESSION file does not exist, create it
+		create_session
+	elif [ ! -s $SESSION_PATH ]
+	then
+		## If the SESSION file exists, but is empty
+		rm ${SESSION_PATH}
+		create_session
+	fi
+
+	# Load the SESSION file
+	SESSION=`cat $SESSION_PATH`
 }
 
 ##===============================================================================
@@ -48,6 +67,11 @@ get_selection() {
 for arg in "$@"
 do
 	case $arg in
+		"-c")
+			echo "Input server name: "
+			read SERVER
+			bw config server $SERVER
+			;;
 		"-h")
 			echo "This is the help menu"
 			;;
@@ -60,22 +84,23 @@ do
 			;;
 		"-l")
 			echo "Locking Bitwarden..."
-			rm $session_path
+			rm $SESSION_PATH
 			bw lock
 			;;
 		"-p")
-			bw --session $session get password $selection | xclip -selection clipboard
+			get_selection MYSESSION MYSELECTION
+			bw --session $MYSESSION get password $MYSELECTION | xclip -selection clipboard
 			;;
 		"-r")
-			rm $session_path
+			rm $SESSION_PATH
 			;;
 		"-u")
-			bw --session $session get username $selection | xclip -selection clipboard
+			get_selection MYSESSION MYSELECTION
+			bw --session $MYSESSION get username $MYSELECTION | xclip -selection clipboard
 			;;
 		"-s")
-			echo "Input server name: "
-			read server
-			bw config server $server
+			get_session MYSESSION
+			bw sync --session $MYSESSION
 			;;
 		*)
 			echo "Invalid argument"
