@@ -89,14 +89,16 @@ do
 			;;
 		"-p")
 			get_selection MYSESSION MYSELECTION
-			bw --session $MYSESSION get password $MYSELECTION | xclip -selection clipboard
+			bw --session $MYSESSION get password "$MYSELECTION" | xclip
+			xclip -o | xclip -sel clip
 			;;
 		"-r")
 			rm $SESSION_PATH
 			;;
 		"-u")
 			get_selection MYSESSION MYSELECTION
-			bw --session $MYSESSION get username $MYSELECTION | xclip -selection clipboard
+			bw --session $MYSESSION get username "$MYSELECTION" | xclip
+			xclip -o | xclip -sel clip
 			;;
 		"-s")
 			get_session MYSESSION

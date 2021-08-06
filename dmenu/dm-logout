@@ -48,13 +48,6 @@ main() {
     "Quit"
     )
 
-    # look up what managers are used (makes it more dynamic)
-    declare -a MANAGERS
-    while IFS= read -r manager
-    do
-        MANAGERS+=("${manager,,}")
-    done < <(grep 'Name' /usr/share/xsessions/*.desktop | awk -F"=" '{print $2}')
-
     # Piping the above array into dmenu.
     # We use "printf '%s\n'" to format the array one item to a line.
     choice=$(printf '%s\n' "${options[@]}" | ${DMENU} -p 'Shutdown menu:' "${@}")
@@ -63,9 +56,7 @@ main() {
     case $choice in
         'Logout')
             if [[ "$(echo -e "No\nYes" | ${DMENU} -p "${choice}?" "${@}" )" == "Yes" ]]; then
-                for manager in "${MANAGERS[@]}"; do
-                    killall "${manager}" || output "Process ${manager} was not running."
-                done
+		    pkill -KILL -u ${USER}
             else
                 output "User chose not to logout." && exit 1
             fi
