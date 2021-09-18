@@ -67,6 +67,23 @@ get_session() {
 for arg in "$@"
 do
 	case $arg in
+		"-a")
+			get_session MYSESSION
+
+			echo "What is the name of the website"
+			read NAME
+			echo "What is the url?"
+			read URL
+			echo "What is the username"
+			read USR
+			echo "Generating password..."
+			PSWD=`pass generate 25`
+
+			echo "TODO: Figure out querey"
+
+			# bw --session $MYSESSION get template item | jq ".name=\"$NAME" | .login=$(bw get template item.login | jq '.username="${USR}" | .password="${PSWD}"')" | bw encode | bw create item
+			;;
+
 		"-c")
 			echo "Input server name: "
 			read SERVER

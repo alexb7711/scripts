@@ -1,0 +1,3 @@
+#!/bin/sh
+
+paru -Qtdq | paru -Rns -
