@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo $1
+
+ls | while read -r FILE
+do
+    mv -v "$FILE" `echo $FILE | tr "$1" "$2"`
+done
