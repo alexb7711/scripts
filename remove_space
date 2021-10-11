@@ -1,6 +1,7 @@
 #!/bin/sh
 
 echo $1
+echo $2
 
 ls | while read -r FILE
 do
