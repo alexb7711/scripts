@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Reference:
+# https://www.diskinternals.com/linux-reader/bash-loop-through-files-in-directory/
+
+FILE=$1
+CMD=$2
+
+for f in $FILE/*
+do
+	echo "Processing $f ..."
+	$CMD $f
+done
