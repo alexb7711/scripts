@@ -3,11 +3,19 @@
 # Reference:
 # https://www.diskinternals.com/linux-reader/bash-loop-through-files-in-directory/
 
-FILE=$1
-CMD=$2
+if [ "$#" -ge 2 ]
+then
+	FILE=$1
+	CMD=$2
 
-for f in $FILE/*
-do
-	echo "Processing $f ..."
-	$CMD $f
-done
+	for f in $FILE/*
+	do
+		echo "Processing $f ..."
+		$CMD $f
+	done
+else
+	echo "ERROR: Invalid arguments"
+	echo "cmd_on_file FILE CMD"
+	echo "FILE - Directory for command to be ran"
+	echo "CMD  - Command to run on files"
+fi
