@@ -1,0 +1,6 @@
+#!/bin/sh
+
+IN_FILE=$1
+OUT_FILE=$2
+
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/prepress -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$2 $1
