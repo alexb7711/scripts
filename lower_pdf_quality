@@ -1,6 +1,23 @@
 #!/bin/sh
 
-IN_FILE=$1
-OUT_FILE=$2
+# Sources
+# https://itsfoss.com/compress-pdf-linux/
+# https://www.codegrepper.com/code-examples/shell/bash+count+number+of+arguments
 
-gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/prepress -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$2 $1
+# If the number of arguments is not equal to 2, abort the program
+
+if [ "$#" -ge 2 ]
+then
+	IN_FILE=$1
+	OUT_FILE=$2
+
+	gs -sDEVICE=pdfwrite     \
+	-dCompatibilityLevel=1.4 \
+	-dPDFSETTINGS=/prepress  \
+	-dNOPAUSE                \
+	-dQUIET                  \
+	-dBATCH                  \
+	-sOutputFile=$2 $1
+else 
+	echo "ERROR: Invalid input"
+fi 
