@@ -7,8 +7,15 @@ if [ "$#" -ge 2 ]
 then
 	FILE=$1
 	CMD=$2
+	EXTENSION="*"
 
-	for f in $FILE/*
+	# If an extension is included
+	if [ "$#" -ge 3 ]
+	then
+		EXTENSION=$3
+	fi
+
+	for f in $FILE/*.$EXTENSION
 	do
 		echo "Processing $f ..."
 		$CMD $f
