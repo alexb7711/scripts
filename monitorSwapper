@@ -32,4 +32,4 @@ xrandr | grep -w 'HDMI-2 connected' && xrandr | grep -w 'HDMI-1 disconnected' &&
 # Pooter
 #################################################################################
 xrandr | grep -w 'DVI-D-0 connected' && xrandr | grep -w 'HDMI-A-0 connected' && xrandr | grep -w 'DisplayPort-2 connected' && xrandr --output DisplayPort-0 --off --output DisplayPort-1 --off --output DisplayPort-2 --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-A-0 --primary --mode 2560x1080 --pos 1920x0 --rotate normal --output DVI-D-0 --mode 1600x900 --pos 4480x0 --rotate left && echo "Pooter"
-xrandr | grep -w 'DVI-D-0 connected' && xrandr | grep -w 'HDMI-A-0 connected' && xrandr | grep -w 'DisplayPort-2 disconnected' && xrandr --output HDMI-A-0 --auto --primary --output DVI-D-0 --auto --right-of HDMI-A-0 --rotate left && echo "Apartment Pooter"
+xrandr | grep -w 'DVI-D-0 connected' && xrandr | grep -w 'HDMI-A-0 connected' && xrandr | grep -w 'DisplayPort-2 disconnected' && xrandr --output HDMI-A-0 --auto --primary --output DVI-D-0 --auto --left-of HDMI-A-0 --rotate right && echo "Apartment Pooter"
