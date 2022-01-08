@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Sources
+# https://itsfoss.com/compress-pdf-linux/
+# https://www.codegrepper.com/code-examples/shell/bash+count+number+of+arguments
+
+# If the number of arguments is not equal to 2, abort the program
+if [ "$#" -ge 2 ]
+then
+	IN_FILE=$1
+	OUT_FILE=$2
+	QUALITY="/prepress"
+
+	if [ "$#" -ge 3 ]
+	then
+		QUALITY="/$3"
+	fi
+
+	gs -sDEVICE=pdfwrite     \
+	-dCompatibilityLevel=1.4 \
+	-dPDFSETTINGS="$QUALITY" \
+	-dNOPAUSE                \
+	-dQUIET                  \
+	-dBATCH                  \
+	-sOutputFile=$2 $1
+else 
+	echo "ERROR: Invalid input"
+	echo "lower_pdf_quality INPUT OUTPUT QUALITY"
+	echo "Quality Options:"
+	echo "screen   - lower quality"
+	echo "ebook    - medium quality"
+	echo "prepress - good quality"
+	echo "printer  - great quality"
+	echo "default  - best quality"
+fi 

@@ -1,3 +1,2 @@
 #!/bin/sh
-
 yay -Qtdq | yay -Rns -
