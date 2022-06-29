@@ -11,7 +11,7 @@
 # Newty
 #################################################################################
 
-# No external display present 
+# No external display present
 xrandr | grep -w 'DP-1 disconnected' && xrandr | grep -w 'HDMI-1 disconnected' && xrandr | grep -w 'HDMI-2 disconnected' && xrandr --output eDP-1 --auto --primary --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off && echo "eDP1" 
 
 # Display port connected and HDMI-2 (Display only on external monitor)
@@ -31,5 +31,8 @@ xrandr | grep -w 'HDMI-2 connected' && xrandr | grep -w 'HDMI-1 disconnected' &&
 #################################################################################
 # Pooter
 #################################################################################
-xrandr | grep -w 'DVI-D-0 connected' && xrandr | grep -w 'HDMI-A-0 connected' && xrandr | grep -w 'DisplayPort-2 connected' && xrandr --output DisplayPort-0 --off --output DisplayPort-1 --off --output DisplayPort-2 --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-A-0 --primary --mode 2560x1080 --pos 1920x0 --rotate normal --output DVI-D-0 --mode 1600x900 --pos 4480x0 --rotate left && echo "Pooter"
+# Display Port
+xrandr | grep -w 'DVI-D-0 connected' && xrandr | grep -w 'HDMI-A-0 connected' && xrandr | grep -w 'DisplayPort-2 connected' && xrandr --output DisplayPort-0 --off --output DisplayPort-1 --off --output DisplayPort-2 --mode 1600x900 --rotate left --right-of HDMI-A-0 --output HDMI-A-0 --primary --mode 2560x1080 --rotate normal --output DVI-D-0 --mode 1600x900  --rotate right --left-of HDMI-A-0 && echo "Pooter"
+
+# No display port
 xrandr | grep -w 'DVI-D-0 connected' && xrandr | grep -w 'HDMI-A-0 connected' && xrandr | grep -w 'DisplayPort-2 disconnected' && xrandr --output HDMI-A-0 --auto --primary --output DVI-D-0 --auto --left-of HDMI-A-0 --rotate right && echo "Apartment Pooter"

@@ -1,5 +1,5 @@
 #!/bin/sh
 
-BASE_DIR=$(ls ~ | fzf)
-DIR=$(find ~/$BASE_DIR/ -type d | fzf)
+BASE_DIR=$(ls ~/ | fzf --preview 'ls -R {}')
+DIR=$(find ~/$BASE_DIR/ -type d | fzf --preview 'ls -R {}')
 echo $DIR

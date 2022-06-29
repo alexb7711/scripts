@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "Enter password: "
+sudo openconnect -u a01704744 --passwd-on-stdin sslvpn.usu.edu 

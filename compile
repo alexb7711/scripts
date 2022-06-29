@@ -11,6 +11,8 @@ case "$file" in
     *.ms) groff -ms "$file" > "$base".ps;;
     *.md) pandoc --pdf-engine=xelatex --bibliography ./main.bib --filter pandoc-include-code --listings --verbose "$file" -o "$base".pdf;;
     *.markdown) pandoc -t beamer --pdf-engine=xelatex --verbose "$file" -o "$base".pdf;;
-    *.tex) pdflatex "$file";;
-    *.puml) plantuml -tutxt "$file";;
+    *.tex) latexmk -pdf $file;;
+    *.puml) plantuml -tutxt "$file"
+            plantuml -tpng "$file"
+	    ;;
 esac
