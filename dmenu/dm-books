@@ -1,5 +1,9 @@
 #!/bin/sh
-path=~/Documents/library
+
+path=~/NextCloud/Documents/library
 books=$(ls $path/*)
 b=$(echo "$(basename -a $books)" | dmenu -l 20 -p "Book: ")
-masterpdfeditor5 "$path/$b"
+reader="emacs"
+
+# Open book in PDF reader
+[ ! -z "${b}" ] && $reader "$path/$b"
