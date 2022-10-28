@@ -1,9 +1,12 @@
 #!/bin/sh
+reader=("emacs" "masterpdfeditor5")
 
 path=~/NextCloud/Documents/library
 books=$(ls $path/*)
+
 b=$(echo "$(basename -a $books)" | dmenu -l 20 -p "Book: ")
-reader="emacs"
+[ ! -z "${b}" ] && r=$(printf "%s\n" ${reader[@]} | dmenu -l 2 -p "Reader: ")
 
 # Open book in PDF reader
-[ ! -z "${b}" ] && $reader "$path/$b"
+[ -z "${r}" ]   && r="emacs"
+[ ! -z "${b}" ] && $r "$path/$b"
