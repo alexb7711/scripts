@@ -1,12 +1,16 @@
 #!/bin/sh
-reader=("emacs" "masterpdfeditor5")
 
+# Edit-able parameters
+reader=("emacs" "masterpdfeditor5")
 path=~/NextCloud/Documents/library
+
+# List of books
 books=$(ls $path/*)
 
-b=$(echo "$(basename -a $books)" | dmenu -l 20 -p "Book: ")
-[ ! -z "${b}" ] && r=$(printf "%s\n" ${reader[@]} | dmenu -l 2 -p "Reader: ")
+# Dmenu
+b=$(echo "$(basename -a $books)" | dmenu -l 20 -p "Book: ")                     # List books
+[ ! -z "${b}" ] && r=$(printf "%s\n" ${reader[@]} | dmenu -l 2 -p "Reader: ")   # List readers
 
 # Open book in PDF reader
-[ -z "${r}" ]   && r="emacs"
+[ -z "${r}" ]   && r="emacs"                                                    # Default to emacs if nothing was chosen
 [ ! -z "${b}" ] && $r "$path/$b"
