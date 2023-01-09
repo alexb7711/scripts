@@ -11,6 +11,9 @@ books=$(ls $path/*)
 b=$(echo "$(basename -a $books)" | dmenu -l 20 -p "Book: ")                     # List books
 [ ! -z "${b}" ] && r=$(printf "%s\n" ${reader[@]} | dmenu -l 2 -p "Reader: ")   # List readers
 
+# Convert reader to command
+[ "$r" = "emacs" ] && r="emacsclient -c -a emacs"
+
 # Open book in PDF reader
-[ -z "${r}" ]   && r="emacs"                                                    # Default to emacs if nothing was chosen
+[ -z "${r}" ]   && r="emacsclient -c -a emacs"                                  # Default to emacs if nothing was chosen
 [ ! -z "${b}" ] && $r "$path/$b"
