@@ -12,10 +12,10 @@
 # Pooter
 #################################################################################
 # P="HDMI-A-0"
-P="DisplayPort-0"
+P="DisplayPort-2"
 L="DVI-D-0"
-R="DisplayPort-2"
-O1="DisplayPort-1"
+R="DisplayPort-1"
+O1="DisplayPort-0"
 O2="HDMI-A-0"
 
 case "$1" in
@@ -29,7 +29,7 @@ case "$1" in
     *)
         xrandr | grep -w "$L connected" && xrandr | grep -w "$P connected" && xrandr | grep -w "$R connected" && \
             xrandr --output $O1 --off --output $O2 --off \
-                   --output $P --primary --mode 3440x1440 --rate 59.97 --rotate normal \
+                   --output $P --primary --mode 3440x1440 --rate 144.00 --rotate normal \
                    --output $R --mode 1600x900  --rotate left --right-of $P \
                    --output $L --mode 1600x900  --rotate left --left-of $P && echo "Pooter"
         ;;
