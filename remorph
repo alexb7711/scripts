@@ -1,2 +1,2 @@
 #!/bin/sh
-yay -Qtdq | yay -Rns -
+paru -Qtdq | paru -Rns -

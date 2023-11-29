@@ -2,7 +2,7 @@
 
 # Edit-able parameters
 reader=("emacs" "masterpdfeditor5" "zathura")
-path=~/NextCloud/Documents/library
+path=~/Documents/library
 
 # List of books
 books=$(ls $path/*)
