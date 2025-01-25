@@ -10,7 +10,6 @@ background_d=(
 for dir in $(shuf -e "${background_d[@]}")
 do
     # If the directory exists
-    echo "$dir"
     if [ -d "$dir" ]
     then
 	      image=$(find ${dir} -type f \( -name "*.png" -o -name "*.jpg" \) | shuf -n 1)
