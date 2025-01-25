@@ -1,0 +1,106 @@
+#!/bin/sh
+# POSIX
+
+###############################################################################
+# FUNCTIONS
+###############################################################################
+
+##=============================================================================
+#
+show_help() {
+	echo "Help for Booker"
+	echo ""
+	echo "This script is ran in two phases:"
+	echo "	- Data generation"
+	echo " 	- Data modification"
+	echo ""
+	echo "Data generation creates a file that contains the metadata of"
+	echo "the provided PDF file."
+	echo ""
+	echo "'booker -o [PDF_NAME].pdf'"
+	echo ""
+	echo "After this is ran, a file called 'data.txt' will be created"
+	echo "that contains the metadata for the PDF. The 'data.txt' file"
+	echo "can then be modified. To update the PDF with the new"
+	echo "with the new metadata, one would run"
+	echo ""
+	echo "'booker -u [METADATA FILE] [PDF_NAME].pdf'"
+}
+
+##=============================================================================
+#
+output_metadata() {
+	pdftk "$file" dump_data output data.txt
+}
+
+##=============================================================================
+#
+update_pdf() {
+	pdftk "$file" update_info "$metadata" output tmp.pdf
+	mv tmp.pdf "$file"
+}
+
+###############################################################################
+# GLOBAL VARIABLES
+###############################################################################
+
+# Reset all variables that might be set
+output=0 # Variable to output the metadata from the PDF
+update=0 # Variable to update the PDF with the metadata file
+file=    # PDF file that is being worked on
+metadata= # Metadata file that is being worked on
+
+###############################################################################
+# SCRIPT
+###############################################################################
+
+# Check if pdftk is installed
+if ! type pdftk >/dev/null 2>/dev/null
+then
+	echo "ERROR: COULD NOT FIND PDFTK"
+	exit 1
+fi
+
+# Read in the parameters
+while :; do
+    case $1 in
+        -h|-\?|--help)   # Call a "show_help" function to display a synopsis, then exit.
+            show_help
+            exit
+            ;;
+        -o|--output)       # Takes an option argument, ensuring it has been specified.
+            if [ -n "$2" ]; then
+                file="$2"
+                shift
+            else
+                printf 'ERROR: "--output" requires a non-empty option argument.\n' >&2
+                exit 1
+            fi
+
+	          output_metadata
+	          exit
+            ;;
+        -u|--update)
+            if [ -n "$3" ]; then
+                file="$2"
+                metadata="$3"
+                shift
+            else
+                printf 'ERROR: "--file" requires two option arguments.\n' >&2
+                exit 1
+            fi
+
+	          update_pdf
+	          exit
+            ;;
+        *)               # Default case: Print the help menu
+	    show_help
+	    exit
+    esac
+
+    shift
+done
+
+# Rest of the program here.
+# If there are input files (for example) that follow the options, they
+# will remain in the "$@" positional parameters.
