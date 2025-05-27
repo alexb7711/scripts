@@ -1,19 +1,34 @@
-#!/bin/sh
+#!/bin/bash
 
-# Edit-able parameters
-reader=("zathura" "emacs" "masterpdfeditor5")
+# Gather up common PDF viewers
+reader=()
+[ ! -z "$(command -v zathura)" ] && reader+=('zathura')
+[ ! -z "$(command -v okular)" ]  && reader+=('okular')
+[ ! -z "$(command -v evince)" ]  && reader+=('evince')
+[ ! -z "$(command -v masterpdfeditor5)" ]  && reader+=('masterpdfeditor5')
+
+# Default path to books
 path=~/Documents/library
 
-# List of books
-books=$(ls $path/*)
+# List books
+books=$(
+        find ${path} -type f -name "*.pdf" -o -name "*.djvu" |
+        xargs -I {} basename -a "{}"
+)
 
-# Dmenu
-b=$(echo "$(basename -a $books)" | dmenu -l 20 -p "Book: ")                     # List books
-[ ! -z "${b}" ] && r=$(printf "%s\n" ${reader[@]} | dmenu -l 2 -p "Reader: ")   # List readers
+# Book selction
+b=$(echo "$books" | dmenu -l 20 -p "Book: ")
 
-# Convert reader to command
-[ "$r" = "emacs" ] && r="emacsclient -c -a emacs"
+# Reader selection
+if [ "${#reader[@]}" -gt 1 ]
+then
+        [ ! -z "${b}" ] && r=$(printf "%s\n" ${reader[@]} | dmenu -l 2 -p "Reader: ")
+else
+        r=${reader}
+fi
+
+# Get the full path of the book
+b=$(find ${path} -type f -name "$b")
 
 # Open book in PDF reader
-[ -z "${r}" ]   && r="emacsclient -c -a emacs"                                  # Default to emacs if nothing was chosen
-[ ! -z "${b}" ] && $r "$path/$b"
+[ ! -z "$b" ] && $r "$b"
